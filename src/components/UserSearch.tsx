@@ -27,7 +27,7 @@ export function UserSearch({ onSubmit }: Props) {
         className="h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:ring-zinc-700"
       />
       <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        Enter para buscar (implemento no próximo passo)
+        Aperte Enter para buscar
       </p>
     </div>
   )

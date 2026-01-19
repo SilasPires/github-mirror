@@ -36,7 +36,10 @@ async function apiGet<T>(path: string, params?: Record<string, QueryValue>) {
   throw new Error(message)
 }
 
-export function getUserRepos(username: string, opts?: { page?: number; per_page?: number; sort?: string }) {
+export function getUserRepos(
+  username: string,
+  opts?: { page?: number; per_page?: number; sort?: string }
+) {
   return apiGet<GitHubRepo[]>(`users/${username}/repos`, {
     page: opts?.page ?? 1,
     per_page: opts?.per_page ?? 30,
@@ -44,7 +47,10 @@ export function getUserRepos(username: string, opts?: { page?: number; per_page?
   })
 }
 
-export function getUserStarred(username: string, opts?: { page?: number; per_page?: number; sort?: string }) {
+export function getUserStarred(
+  username: string,
+  opts?: { page?: number; per_page?: number; sort?: string }
+) {
   return apiGet<GitHubRepo[]>(`users/${username}/starred`, {
     page: opts?.page ?? 1,
     per_page: opts?.per_page ?? 30,
