@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { UserSearch } from "@/components/UserSearch";
+import { UserSearch } from '@/components/UserSearch'
 
 export default function ReposPage() {
   return (
@@ -18,5 +18,5 @@ export default function ReposPage() {
         Placeholder de lista
       </div>
     </div>
-  );
+  )
 }

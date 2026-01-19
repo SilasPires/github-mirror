@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { UserSearch } from "@/components/UserSearch";
+import { UserSearch } from '@/components/UserSearch'
 
 export default function StarredPage() {
   return (
@@ -18,5 +18,5 @@ export default function StarredPage() {
         Placeholder de lista
       </div>
     </div>
-  );
+  )
 }

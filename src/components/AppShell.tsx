@@ -1,4 +1,4 @@
-import { NavTabs } from "@/components/NavTabs";
+import { NavTabs } from '@/components/NavTabs'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -19,5 +19,5 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
     </div>
-  );
+  )
 }

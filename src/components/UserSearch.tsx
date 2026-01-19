@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import { useUserStore } from "@/store/userStore";
+import { useUserStore } from '@/store/userStore'
 
 type Props = {
-  onSubmit?: (username: string) => void;
-};
+  onSubmit?: (username: string) => void
+}
 
 export function UserSearch({ onSubmit }: Props) {
-  const username = useUserStore((s) => s.username);
-  const setUsername = useUserStore((s) => s.setUsername);
+  const username = useUserStore((s) => s.username)
+  const setUsername = useUserStore((s) => s.setUsername)
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -19,8 +19,8 @@ export function UserSearch({ onSubmit }: Props) {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onSubmit?.(username.trim());
+          if (e.key === 'Enter') {
+            onSubmit?.(username.trim())
           }
         }}
         placeholder="ex: octocat"
@@ -30,5 +30,5 @@ export function UserSearch({ onSubmit }: Props) {
         Enter para buscar (implemento no próximo passo)
       </p>
     </div>
-  );
+  )
 }
