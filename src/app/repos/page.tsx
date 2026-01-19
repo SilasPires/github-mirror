@@ -45,7 +45,8 @@ export default function ReposPage() {
             <div className="mt-2 opacity-90">
               Dica: você pode colocar um{' '}
               <span className="font-medium">GITHUB_TOKEN</span> no
-              <span className="font-medium"> .env.local</span> pra aumentar o limite.
+              <span className="font-medium"> .env.local</span> pra aumentar o
+              limite.
             </div>
           ) : null}
         </div>
@@ -74,7 +75,9 @@ export default function ReposPage() {
                       {repo.description}
                     </div>
                   ) : (
-                    <div className="mt-1 text-sm text-zinc-400">Sem descrição</div>
+                    <div className="mt-1 text-sm text-zinc-400">
+                      Sem descrição
+                    </div>
                   )}
                 </div>
 
@@ -87,7 +90,8 @@ export default function ReposPage() {
               <div className="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
                 <span>{repo.language ?? '—'}</span>
                 <span>
-                  Atualizado: {new Date(repo.updated_at).toLocaleDateString('pt-BR')}
+                  Atualizado:{' '}
+                  {new Date(repo.updated_at).toLocaleDateString('pt-BR')}
                 </span>
               </div>
 
