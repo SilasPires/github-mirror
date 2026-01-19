@@ -8,6 +8,9 @@ export type GitHubUser = {
 export type GitHubUserProfile = GitHubUser & {
   name: string | null
   bio: string | null
+  company: string | null
+  location: string | null
+  blog: string | null
   followers: number
   following: number
   public_repos: number

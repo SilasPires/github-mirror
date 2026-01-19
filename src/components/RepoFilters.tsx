@@ -38,29 +38,54 @@ export function RepoFilters({ languages }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2">
+        <div className="relative w-full sm:max-w-md">
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-zinc-400"
+          >
+            <path d="M10 4a6 6 0 1 1 0 12A6 6 0 0 1 10 4Zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9.7 13.3-3.2-3.2a8 8 0 1 1 1.4-1.4l3.2 3.2a1 1 0 0 1-1.4 1.4Z" />
+          </svg>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search Here"
+            className="h-11 w-full rounded-full border border-zinc-200 bg-white pl-11 pr-4 text-sm outline-none focus:ring-2 focus:ring-zinc-200"
+          />
+        </div>
+
+        <div className="flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setDrawer('type')}
-            className="rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700"
+            className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-[#1e88e5] to-[#1565c0] px-4 py-2 text-sm font-medium text-white shadow-sm"
           >
-            Type: {typeLabel}
+            <span>Type</span>
+            <span className="opacity-90">{typeLabel}</span>
+            <svg
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+              className="h-4 w-4 fill-white/90"
+            >
+              <path d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.4Z" />
+            </svg>
           </button>
           <button
             type="button"
             onClick={() => setDrawer('language')}
-            className="rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700"
+            className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-[#1e88e5] to-[#1565c0] px-4 py-2 text-sm font-medium text-white shadow-sm"
           >
-            Language: {languageLabel}
+            <span>Language</span>
+            <span className="opacity-90">{languageLabel}</span>
+            <svg
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+              className="h-4 w-4 fill-white/90"
+            >
+              <path d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.4Z" />
+            </svg>
           </button>
         </div>
-
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search Here"
-          className="h-10 w-full rounded-full border border-zinc-300 bg-white px-4 text-sm outline-none focus:ring-2 focus:ring-zinc-200 sm:max-w-xs"
-        />
       </div>
 
       {drawer ? (

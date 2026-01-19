@@ -83,14 +83,6 @@ export default function ReposPage() {
         <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           <div className="font-medium">Erro ao carregar</div>
           <div className="mt-1 wrap-break-word opacity-90">{errorMessage}</div>
-          {rateLimited ? (
-            <div className="mt-2 opacity-90">
-              Dica: você pode colocar um{' '}
-              <span className="font-medium">GITHUB_TOKEN</span> no
-              <span className="font-medium"> .env.local</span> pra aumentar o
-              limite.
-            </div>
-          ) : null}
         </div>
       ) : filteredRepos.length === 0 ? (
         <div className="rounded-md border border-zinc-200 p-4 text-sm text-zinc-600">
