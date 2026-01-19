@@ -5,6 +5,7 @@ import { getUserRepos } from '@/lib/github/client'
 import { githubKeys } from '@/lib/github/queryKeys'
 import { useUserStore } from '@/store/userStore'
 import { useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 
 export default function ReposPage() {
   const activeUsername = useUserStore((s) => s.activeUsername)
@@ -25,7 +26,8 @@ export default function ReposPage() {
       <div>
         <h2 className="text-lg font-semibold">Repositories</h2>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Buscando repositórios de <span className="font-medium">{activeUsername}</span>
+          Buscando repositórios de{' '}
+          <span className="font-medium">{activeUsername}</span>
         </p>
       </div>
 
@@ -41,8 +43,10 @@ export default function ReposPage() {
           <div className="mt-1 wrap-break-word opacity-90">{errorMessage}</div>
           {rateLimited ? (
             <div className="mt-2 opacity-90">
-              Dica: você pode colocar um <span className="font-medium">GITHUB_TOKEN</span> no
-              <span className="font-medium"> .env.local</span> pra aumentar o limite.
+              Dica: você pode colocar um{' '}
+              <span className="font-medium">GITHUB_TOKEN</span> no
+              <span className="font-medium"> .env.local</span> pra aumentar o
+              limite.
             </div>
           ) : null}
         </div>
@@ -69,25 +73,58 @@ export default function ReposPage() {
                         {repo.description}
                       </div>
                     ) : (
-                      <div className="mt-1 text-sm text-zinc-400">Sem descrição</div>
+                      <div className="mt-1 text-sm text-zinc-400">
+                        Sem descrição
+                      </div>
                     )}
                   </div>
+                                <div
+                                  key={repo.id}
+                                  className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                      <Link
+                                        href={`/repos/${repo.owner.login}/${repo.name}`}
+                                        className="truncate font-medium hover:underline"
+                                      >
+                                        {repo.full_name}
+                                      </Link>
 
-                  <div className="shrink-0 text-right text-xs text-zinc-500 dark:text-zinc-400">
-                    <div>★ {repo.stargazers_count}</div>
-                    <div>⑂ {repo.forks_count}</div>
-                  </div>
-                </div>
+                                      {repo.description ? (
+                                        <div className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-300">
+                                          {repo.description}
+                                        </div>
+                                      ) : (
+                                        <div className="mt-1 text-sm text-zinc-400">Sem descrição</div>
+                                      )}
+                                    </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                  <span>{repo.language ?? '—'}</span>
-                  <span>Atualizado: {new Date(repo.updated_at).toLocaleDateString('pt-BR')}</span>
-                </div>
-              </a>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
+                                    <div className="shrink-0 text-right text-xs text-zinc-500 dark:text-zinc-400">
+                                      <div>★ {repo.stargazers_count}</div>
+                                      <div>⑂ {repo.forks_count}</div>
+                                    </div>
+                                  </div>
+
+                                  <div className="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                                    <span>{repo.language ?? '—'}</span>
+                                    <span>Atualizado: {new Date(repo.updated_at).toLocaleDateString('pt-BR')}</span>
+                                  </div>
+
+                                  <div className="mt-3 flex items-center gap-3">
+                                    <Link
+                                      href={`/repos/${repo.owner.login}/${repo.name}`}
+                                      className="text-sm font-medium text-zinc-800 hover:underline dark:text-zinc-100"
+                                    >
+                                      Ver detalhes
+                                    </Link>
+                                    <a
+                                      href={repo.html_url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-sm text-zinc-500 hover:underline dark:text-zinc-400"
+                                    >
+                                      Abrir no GitHub
+                                    </a>
+                                  </div>
+                                </div>
