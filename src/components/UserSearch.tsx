@@ -35,7 +35,7 @@ export function UserSearch({ onSubmit, variant = 'default' }: Props) {
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSubmit()
           }}
-          placeholder="Search user"
+          placeholder="Buscar usuário"
           className="h-9 w-full rounded-full border border-white/15 bg-white/10 pl-9 pr-3 text-sm text-white outline-none placeholder:text-white/60 focus:border-white/25 focus:ring-2 focus:ring-white/10"
         />
       </div>
@@ -55,10 +55,10 @@ export function UserSearch({ onSubmit, variant = 'default' }: Props) {
             handleSubmit()
           }
         }}
-        placeholder="ex: octocat"
+        placeholder="Ex.: octocat"
         className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-200"
       />
-      <p className="text-xs text-zinc-500">Aperte Enter para buscar</p>
+      <p className="text-xs text-zinc-500">Pressione Enter para buscar</p>
     </div>
   )
 }

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const tabs = [
-  { href: '/repos', label: 'Repositories' },
-  { href: '/starred', label: 'Starred' },
+  { href: '/repos', label: 'Repositórios' },
+  { href: '/starred', label: 'Favoritos' },
 ]
 
 export function NavTabs() {

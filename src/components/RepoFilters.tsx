@@ -10,11 +10,11 @@ type Props = {
 type Drawer = 'type' | 'language' | null
 
 const typeOptions = [
-  { value: 'all', label: 'All' },
-  { value: 'sources', label: 'Sources' },
+  { value: 'all', label: 'Todos' },
+  { value: 'sources', label: 'Somente sources' },
   { value: 'forks', label: 'Forks' },
-  { value: 'archived', label: 'Archived' },
-  { value: 'mirrors', label: 'Mirrors' },
+  { value: 'archived', label: 'Arquivados' },
+  { value: 'mirrors', label: 'Espelhos' },
 ] as const
 
 export function RepoFilters({ languages }: Props) {
@@ -32,8 +32,8 @@ export function RepoFilters({ languages }: Props) {
     return ['all', ...languages]
   }, [languages])
 
-  const typeLabel = typeOptions.find((t) => t.value === type)?.label ?? 'All'
-  const languageLabel = language === 'all' ? 'All' : language
+  const typeLabel = typeOptions.find((t) => t.value === type)?.label ?? 'Todos'
+  const languageLabel = language === 'all' ? 'Todas' : language
 
   return (
     <div className="flex flex-col gap-3">
@@ -49,7 +49,7 @@ export function RepoFilters({ languages }: Props) {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search Here"
+            placeholder="Filtrar repositórios..."
             className="h-11 w-full rounded-full border border-zinc-200 bg-white pl-11 pr-4 text-sm outline-none focus:ring-2 focus:ring-zinc-200"
           />
         </div>
@@ -60,7 +60,7 @@ export function RepoFilters({ languages }: Props) {
             onClick={() => setDrawer('type')}
             className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-[#1e88e5] to-[#1565c0] px-4 py-2 text-sm font-medium text-white shadow-sm"
           >
-            <span>Type</span>
+            <span>Tipo</span>
             <span className="opacity-90">{typeLabel}</span>
             <svg
               viewBox="0 0 20 20"
@@ -75,7 +75,7 @@ export function RepoFilters({ languages }: Props) {
             onClick={() => setDrawer('language')}
             className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-[#1e88e5] to-[#1565c0] px-4 py-2 text-sm font-medium text-white shadow-sm"
           >
-            <span>Language</span>
+            <span>Linguagem</span>
             <span className="opacity-90">{languageLabel}</span>
             <svg
               viewBox="0 0 20 20"
@@ -93,7 +93,7 @@ export function RepoFilters({ languages }: Props) {
           <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-6">
             <div className="flex items-start justify-between">
               <div className="text-2xl font-semibold">
-                {drawer === 'language' ? 'Language' : 'Type'}
+                {drawer === 'language' ? 'Linguagem' : 'Tipo'}
               </div>
               <button
                 type="button"
@@ -132,7 +132,7 @@ export function RepoFilters({ languages }: Props) {
                         onChange={() => setLanguage(opt)}
                         className="h-4 w-4"
                       />
-                      <span>{opt === 'all' ? 'All' : opt}</span>
+                      <span>{opt === 'all' ? 'Todas' : opt}</span>
                     </label>
                   ))}
             </div>

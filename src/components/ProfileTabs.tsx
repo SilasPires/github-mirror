@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const tabs = [
-  { href: '/repos', label: 'Repositories', countKey: 'reposCount' as const },
-  { href: '/starred', label: 'Starred', countKey: 'starredCount' as const },
+  { href: '/repos', label: 'Repositórios', countKey: 'reposCount' as const },
+  { href: '/starred', label: 'Favoritos', countKey: 'starredCount' as const },
 ]
 
 function RepoIcon() {

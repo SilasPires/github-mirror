@@ -13,9 +13,9 @@ Projeto de teste front-end feito com Next.js (App Router) + TypeScript, consumin
 ## Features
 
 - Buscar usuário por username do GitHub (procura com Enter)
-- Abas: **Repositories** e **Starred**
+- Abas: **Repositórios** e **Favoritos**
 - Página de detalhes do repositório
-- Filtros: Search, Type (all/sources/forks/archived/mirrors), Language
+- Filtros: Busca, Tipo (todos/sources/forks/arquivados/espelhos), Linguagem
 
 ## Rodando localmente
 

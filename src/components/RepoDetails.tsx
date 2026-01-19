@@ -46,7 +46,11 @@ export function RepoDetails({ owner, repo }: Props) {
   }
 
   if (!data) {
-    return <div className="text-sm text-zinc-600">Nenhum dado.</div>
+    return (
+      <div className="text-sm text-zinc-600">
+        Não encontramos dados desse repositório.
+      </div>
+    )
   }
 
   return (
@@ -72,7 +76,7 @@ export function RepoDetails({ owner, repo }: Props) {
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <div className="rounded-md border border-zinc-200 p-3">
-          <div className="text-xs text-zinc-500">Stars</div>
+          <div className="text-xs text-zinc-500">Estrelas</div>
           <div className="mt-1 font-semibold">{data.stargazers_count}</div>
         </div>
         <div className="rounded-md border border-zinc-200 p-3">

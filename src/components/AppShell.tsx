@@ -16,7 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </svg>
             <div className="text-base font-semibold">GitHub</div>
             <div className="text-sm opacity-70">/</div>
-            <div className="text-sm opacity-90">Profile</div>
+            <div className="text-sm opacity-90">Perfil</div>
           </div>
           <div className="w-full max-w-sm">
             <UserSearch variant="header" />

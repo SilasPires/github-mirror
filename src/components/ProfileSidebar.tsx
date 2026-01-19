@@ -23,15 +23,13 @@ export function ProfileSidebar({ variant = 'desktop' }: Props) {
 
   const blue = '#0587FF'
 
-  const followersText = `${user?.followers ?? 9} followers · ${
-    user?.following ?? 7
-  } following`
+  const followersText =
+    typeof user?.followers === 'number' && typeof user?.following === 'number'
+      ? `${user.followers} seguidores · ${user.following} seguindo`
+      : ''
 
-  const companyText = user?.company?.trim() || 'Pêndulo Soluções Digitais LTDA'
-  const locationText =
-    user?.location?.trim() || 'Vitória da Conquista, Bahia - Brazil'
-  const linkedinText = 'linkedin.com/in/silas-pires-720918190'
-  const linkedinUrl = `https://${linkedinText}`
+  const companyText = user?.company?.trim() || ''
+  const locationText = user?.location?.trim() || ''
 
   return (
     <div
@@ -46,7 +44,7 @@ export function ProfileSidebar({ variant = 'desktop' }: Props) {
           {user?.avatar_url ? (
             <Image
               src={user.avatar_url}
-              alt="Avatar"
+              alt="Avatar do usuário"
               width={160}
               height={160}
               className="h-full w-full object-cover"
@@ -66,27 +64,23 @@ export function ProfileSidebar({ variant = 'desktop' }: Props) {
         </div>
 
         <div className="mt-4 flex flex-col gap-2 text-sm">
-          <div className="wrap-break-word" style={{ color: blue }}>
-            {followersText}
-          </div>
+          {followersText ? (
+            <div className="wrap-break-word" style={{ color: blue }}>
+              {followersText}
+            </div>
+          ) : null}
 
-          <div className="wrap-break-word" style={{ color: blue }}>
-            {companyText}
-          </div>
+          {companyText ? (
+            <div className="wrap-break-word" style={{ color: blue }}>
+              {companyText}
+            </div>
+          ) : null}
 
-          <div className="wrap-break-word" style={{ color: blue }}>
-            {locationText}
-          </div>
-
-          <a
-            href={linkedinUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="wrap-break-word hover:underline"
-            style={{ color: blue }}
-          >
-            {linkedinText}
-          </a>
+          {locationText ? (
+            <div className="wrap-break-word" style={{ color: blue }}>
+              {locationText}
+            </div>
+          ) : null}
 
           <a
             href={user?.html_url ?? `https://github.com/${activeUsername}`}
