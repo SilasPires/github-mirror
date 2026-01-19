@@ -12,7 +12,7 @@ export function UserSearch({ onSubmit }: Props) {
 
   return (
     <div className="flex w-full flex-col gap-2">
-      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label className="text-sm font-medium text-zinc-800">
         GitHub username
       </label>
       <input
@@ -24,11 +24,9 @@ export function UserSearch({ onSubmit }: Props) {
           }
         }}
         placeholder="ex: octocat"
-        className="h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:ring-zinc-700"
+        className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-200"
       />
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        Aperte Enter para buscar
-      </p>
+      <p className="text-xs text-zinc-500">Aperte Enter para buscar</p>
     </div>
   )
 }

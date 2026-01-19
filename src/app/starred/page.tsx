@@ -1,18 +1,19 @@
 'use client'
 
+import { ProfileTabs } from '@/components/ProfileTabs'
 import { RepoFilters } from '@/components/RepoFilters'
-import { UserSearch } from '@/components/UserSearch'
 import { getUserStarred } from '@/lib/github/client'
 import { githubKeys } from '@/lib/github/queryKeys'
+import { useCountsStore } from '@/store/countsStore'
 import { useRepoFiltersStore } from '@/store/repoFiltersStore'
 import { useUserStore } from '@/store/userStore'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export default function StarredPage() {
   const activeUsername = useUserStore((s) => s.activeUsername)
-  const submitUsername = useUserStore((s) => s.submitUsername)
+  const setStarredCount = useCountsStore((s) => s.setStarredCount)
 
   const query = useQuery({
     queryKey: githubKeys.starred(activeUsername),
@@ -24,9 +25,13 @@ export default function StarredPage() {
   const errorMessage = query.error instanceof Error ? query.error.message : ''
 
   const filterLanguage = useRepoFiltersStore((s) => s.language)
-  const onlyForks = useRepoFiltersStore((s) => s.onlyForks)
+  const type = useRepoFiltersStore((s) => s.type)
   const filterQuery = useRepoFiltersStore((s) => s.query)
   const sort = useRepoFiltersStore((s) => s.sort)
+
+  useEffect(() => {
+    setStarredCount(repos.length)
+  }, [repos.length, setStarredCount])
 
   const languages = useMemo(() => {
     const set = new Set<string>()
@@ -40,7 +45,10 @@ export default function StarredPage() {
     const q = filterQuery.trim().toLowerCase()
 
     const list = repos.filter((r) => {
-      if (onlyForks && !r.fork) return false
+      if (type === 'forks' && !r.fork) return false
+      if (type === 'sources' && r.fork) return false
+      if (type === 'archived' && !r.archived) return false
+      if (type === 'mirrors' && !r.mirror_url) return false
       if (filterLanguage !== 'all' && r.language !== filterLanguage)
         return false
       if (q) {
@@ -58,90 +66,60 @@ export default function StarredPage() {
     })
 
     return list
-  }, [repos, onlyForks, filterLanguage, filterQuery, sort])
+  }, [repos, type, filterLanguage, filterQuery, sort])
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-lg font-semibold">Starred</h2>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Favoritos de <span className="font-medium">{activeUsername}</span>
-        </p>
-      </div>
-
-      <UserSearch onSubmit={(username) => submitUsername(username)} />
+      <ProfileTabs />
 
       <RepoFilters languages={languages} />
 
       {query.isLoading ? (
-        <div className="rounded-lg border border-zinc-200 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+        <div className="rounded-md border border-zinc-200 p-4 text-sm text-zinc-600">
           Carregando...
         </div>
       ) : query.isError ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-200">
+        <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           <div className="font-medium">Erro ao carregar</div>
           <div className="mt-1 wrap-break-word opacity-90">{errorMessage}</div>
         </div>
       ) : filteredRepos.length === 0 ? (
-        <div className="rounded-lg border border-zinc-200 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+        <div className="rounded-md border border-zinc-200 p-4 text-sm text-zinc-600">
           Nenhum favorito encontrado com esses filtros.
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {filteredRepos.map((repo) => (
-            <div
-              key={repo.id}
-              className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
-            >
+            <div key={repo.id} className="border-b border-zinc-200 py-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <Link
                     href={`/repos/${repo.owner.login}/${repo.name}`}
-                    className="truncate font-medium hover:underline"
+                    className="truncate text-base font-semibold text-[#0969da] hover:underline"
                   >
-                    {repo.full_name}
+                    {repo.name}
                   </Link>
-
                   {repo.description ? (
-                    <div className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-300">
+                    <div className="mt-1 line-clamp-2 text-sm text-zinc-600">
                       {repo.description}
                     </div>
-                  ) : (
-                    <div className="mt-1 text-sm text-zinc-400">
-                      Sem descrição
-                    </div>
-                  )}
+                  ) : null}
                 </div>
 
-                <div className="shrink-0 text-right text-xs text-zinc-500 dark:text-zinc-400">
-                  <div>★ {repo.stargazers_count}</div>
-                  <div>⑂ {repo.forks_count}</div>
-                </div>
-              </div>
-
-              <div className="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                <span>{repo.language ?? '—'}</span>
-                <span>
-                  Atualizado:{' '}
-                  {new Date(repo.updated_at).toLocaleDateString('pt-BR')}
-                </span>
-              </div>
-
-              <div className="mt-3 flex items-center gap-3">
-                <Link
-                  href={`/repos/${repo.owner.login}/${repo.name}`}
-                  className="text-sm font-medium text-zinc-800 hover:underline dark:text-zinc-100"
-                >
-                  Ver detalhes
-                </Link>
                 <a
                   href={repo.html_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-zinc-500 hover:underline dark:text-zinc-400"
+                  className="shrink-0 rounded-full border border-zinc-300 px-3 py-1 text-xs text-zinc-700"
                 >
-                  Abrir no GitHub
+                  GitHub
                 </a>
+              </div>
+
+              <div className="mt-3 flex items-center gap-5 text-xs text-zinc-500">
+                <span>{repo.language ?? '—'}</span>
+                <span>★ {repo.stargazers_count}</span>
+                <span>⑂ {repo.forks_count}</span>
               </div>
             </div>
           ))}

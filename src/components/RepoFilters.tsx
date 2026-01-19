@@ -1,101 +1,119 @@
 'use client'
 
 import { useRepoFiltersStore } from '@/store/repoFiltersStore'
+import { useMemo, useState } from 'react'
 
 type Props = {
   languages: string[]
 }
 
-const sortOptions = ['updated', 'stars', 'forks', 'name'] as const
-type SortOption = (typeof sortOptions)[number]
+type Drawer = 'type' | 'language' | null
+
+const typeOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'sources', label: 'Sources' },
+  { value: 'forks', label: 'Forks' },
+  { value: 'archived', label: 'Archived' },
+  { value: 'mirrors', label: 'Mirrors' },
+] as const
 
 export function RepoFilters({ languages }: Props) {
   const language = useRepoFiltersStore((s) => s.language)
-  const onlyForks = useRepoFiltersStore((s) => s.onlyForks)
+  const type = useRepoFiltersStore((s) => s.type)
   const query = useRepoFiltersStore((s) => s.query)
-  const sort = useRepoFiltersStore((s) => s.sort)
 
   const setLanguage = useRepoFiltersStore((s) => s.setLanguage)
-  const toggleOnlyForks = useRepoFiltersStore((s) => s.toggleOnlyForks)
+  const setType = useRepoFiltersStore((s) => s.setType)
   const setQuery = useRepoFiltersStore((s) => s.setQuery)
-  const setSort = useRepoFiltersStore((s) => s.setSort)
-  const reset = useRepoFiltersStore((s) => s.reset)
+
+  const [drawer, setDrawer] = useState<Drawer>(null)
+
+  const languageOptions = useMemo(() => {
+    return ['all', ...languages]
+  }, [languages])
+
+  const typeLabel = typeOptions.find((t) => t.value === type)?.label ?? 'All'
+  const languageLabel = language === 'all' ? 'All' : language
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium">Filtros</div>
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="text-xs text-zinc-500 hover:underline dark:text-zinc-400"
-        >
-          limpar
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-zinc-500 dark:text-zinc-400">
-            Linguagem
-          </label>
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="h-10 rounded-md border border-zinc-200 bg-white px-2 text-sm dark:border-zinc-800 dark:bg-zinc-950"
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setDrawer('type')}
+            className="rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700"
           >
-            <option value="all">Todas</option>
-            {languages.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-zinc-500 dark:text-zinc-400">
-            Ordenar
-          </label>
-          <select
-            value={sort}
-            onChange={(e) => {
-              const value = e.target.value
-              if (sortOptions.includes(value as SortOption)) {
-                setSort(value as SortOption)
-              }
-            }}
-            className="h-10 rounded-md border border-zinc-200 bg-white px-2 text-sm dark:border-zinc-800 dark:bg-zinc-950"
+            Type: {typeLabel}
+          </button>
+          <button
+            type="button"
+            onClick={() => setDrawer('language')}
+            className="rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700"
           >
-            <option value="updated">Atualizado</option>
-            <option value="stars">Stars</option>
-            <option value="forks">Forks</option>
-            <option value="name">Nome</option>
-          </select>
+            Language: {languageLabel}
+          </button>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-zinc-500 dark:text-zinc-400">
-            Buscar na lista
-          </label>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="filtrar por nome"
-            className="h-10 rounded-md border border-zinc-200 bg-white px-2 text-sm outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-950 dark:focus:ring-zinc-700"
-          />
-        </div>
-      </div>
-
-      <label className="flex items-center gap-2 text-sm">
         <input
-          type="checkbox"
-          checked={onlyForks}
-          onChange={() => toggleOnlyForks()}
-          className="h-4 w-4"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search Here"
+          className="h-10 w-full rounded-full border border-zinc-300 bg-white px-4 text-sm outline-none focus:ring-2 focus:ring-zinc-200 sm:max-w-xs"
         />
-        <span className="text-zinc-700 dark:text-zinc-200">Somente forks</span>
-      </label>
+      </div>
+
+      {drawer ? (
+        <div className="fixed inset-0 z-50 bg-black/30">
+          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-6">
+            <div className="flex items-start justify-between">
+              <div className="text-2xl font-semibold">
+                {drawer === 'language' ? 'Language' : 'Type'}
+              </div>
+              <button
+                type="button"
+                onClick={() => setDrawer(null)}
+                className="text-2xl leading-none text-red-500"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-4">
+              {drawer === 'type'
+                ? typeOptions.map((opt) => (
+                    <label
+                      key={opt.value}
+                      className="flex items-center gap-3 text-base"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={type === opt.value}
+                        onChange={() => setType(opt.value)}
+                        className="h-4 w-4"
+                      />
+                      <span>{opt.label}</span>
+                    </label>
+                  ))
+                : languageOptions.map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-3 text-base"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={language === opt}
+                        onChange={() => setLanguage(opt)}
+                        className="h-4 w-4"
+                      />
+                      <span>{opt === 'all' ? 'All' : opt}</span>
+                    </label>
+                  ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

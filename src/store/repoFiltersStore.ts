@@ -1,15 +1,16 @@
 import { create } from 'zustand'
 
 type SortOption = 'updated' | 'stars' | 'forks' | 'name'
+type TypeFilter = 'all' | 'sources' | 'forks' | 'archived' | 'mirrors'
 
 type RepoFiltersState = {
   language: string
-  onlyForks: boolean
+  type: TypeFilter
   query: string
   sort: SortOption
 
   setLanguage: (language: string) => void
-  toggleOnlyForks: () => void
+  setType: (type: TypeFilter) => void
   setQuery: (query: string) => void
   setSort: (sort: SortOption) => void
   reset: () => void
@@ -17,14 +18,14 @@ type RepoFiltersState = {
 
 export const useRepoFiltersStore = create<RepoFiltersState>((set) => ({
   language: 'all',
-  onlyForks: false,
+  type: 'all',
   query: '',
   sort: 'updated',
 
   setLanguage: (language) => set({ language }),
-  toggleOnlyForks: () => set((s) => ({ onlyForks: !s.onlyForks })),
+  setType: (type) => set({ type }),
   setQuery: (query) => set({ query }),
   setSort: (sort) => set({ sort }),
   reset: () =>
-    set({ language: 'all', onlyForks: false, query: '', sort: 'updated' }),
+    set({ language: 'all', type: 'all', query: '', sort: 'updated' }),
 }))

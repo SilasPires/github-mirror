@@ -1,4 +1,4 @@
-import type { GitHubApiError, GitHubRepo } from './types'
+import type { GitHubApiError, GitHubRepo, GitHubUserProfile } from './types'
 
 type QueryValue = string | number | boolean | null | undefined
 
@@ -60,4 +60,8 @@ export function getUserStarred(
 
 export function getRepo(owner: string, repo: string) {
   return apiGet<GitHubRepo>(`repos/${owner}/${repo}`)
+}
+
+export function getUser(username: string) {
+  return apiGet<GitHubUserProfile>(`users/${username}`)
 }
