@@ -1,11 +1,14 @@
 'use client'
 
+import { RepoFilters } from '@/components/RepoFilters'
 import { UserSearch } from '@/components/UserSearch'
 import { getUserRepos } from '@/lib/github/client'
 import { githubKeys } from '@/lib/github/queryKeys'
+import { useRepoFiltersStore } from '@/store/repoFiltersStore'
 import { useUserStore } from '@/store/userStore'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import { useMemo } from 'react'
 
 export default function ReposPage() {
   const activeUsername = useUserStore((s) => s.activeUsername)
@@ -17,9 +20,46 @@ export default function ReposPage() {
     enabled: Boolean(activeUsername),
   })
 
-  const repos = query.data ?? []
+  const repos = useMemo(() => query.data ?? [], [query.data])
   const errorMessage = query.error instanceof Error ? query.error.message : ''
   const rateLimited = errorMessage.toLowerCase().includes('rate limit')
+
+  const filterLanguage = useRepoFiltersStore((s) => s.language)
+  const onlyForks = useRepoFiltersStore((s) => s.onlyForks)
+  const filterQuery = useRepoFiltersStore((s) => s.query)
+  const sort = useRepoFiltersStore((s) => s.sort)
+
+  const languages = useMemo(() => {
+    const set = new Set<string>()
+    repos.forEach((r) => {
+      if (r.language) set.add(r.language)
+    })
+    return Array.from(set).sort((a, b) => a.localeCompare(b))
+  }, [repos])
+
+  const filteredRepos = useMemo(() => {
+    const q = filterQuery.trim().toLowerCase()
+
+    const list = repos.filter((r) => {
+      if (onlyForks && !r.fork) return false
+      if (filterLanguage !== 'all' && r.language !== filterLanguage)
+        return false
+      if (q) {
+        const hay = `${r.full_name} ${r.name}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      return true
+    })
+
+    list.sort((a, b) => {
+      if (sort === 'stars') return b.stargazers_count - a.stargazers_count
+      if (sort === 'forks') return b.forks_count - a.forks_count
+      if (sort === 'name') return a.name.localeCompare(b.name)
+      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    })
+
+    return list
+  }, [repos, onlyForks, filterLanguage, filterQuery, sort])
 
   return (
     <div className="flex flex-col gap-4">
@@ -32,6 +72,8 @@ export default function ReposPage() {
       </div>
 
       <UserSearch onSubmit={(username) => submitUsername(username)} />
+
+      <RepoFilters languages={languages} />
 
       {query.isLoading ? (
         <div className="rounded-lg border border-zinc-200 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
@@ -50,13 +92,13 @@ export default function ReposPage() {
             </div>
           ) : null}
         </div>
-      ) : repos.length === 0 ? (
+      ) : filteredRepos.length === 0 ? (
         <div className="rounded-lg border border-zinc-200 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
-          Nenhum repositório encontrado.
+          Nenhum repositório encontrado com esses filtros.
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {repos.map((repo) => (
+          {filteredRepos.map((repo) => (
             <div
               key={repo.id}
               className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"

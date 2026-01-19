@@ -10,6 +10,7 @@ export type GitHubRepo = {
   name: string
   full_name: string
   private: boolean
+  fork: boolean
   html_url: string
   description: string | null
   stargazers_count: number
